@@ -6,6 +6,17 @@ const XMLHttpRequest  = require("xhr2");
 
 //check solo.to to see if each of the names exist and wait 10 seconds between each check
 async.eachSeries(names, function(name, callback) {
+        //remove the variable name from the file
+        fs.readFile('names.txt', 'utf8', function (err,data) {
+                if (err) {
+                        return console.log(err);
+                }
+                var result = data.replace(name, "");
+                fs.writeFile('names.txt', result, 'utf8', function (err) {
+                        if (err) return console.log(err);
+                });
+        });
+        
         setTimeout(function() {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "https://solo.to/" + name);
@@ -18,8 +29,7 @@ async.eachSeries(names, function(name, callback) {
                                         fs.writeFileSync('workingnames.txt', name + "\n", {flag: 'a'});
                                 } else {
                                         if(xhr.status == 200) {
-                                                console.log(name + " exists");
-                                                fs.appendFileSync('workingnames.txt', name + "\n", {flag: 'a'});
+                                                console.log(name + " exists");                                                
                                         }
                                 }
                         }
