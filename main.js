@@ -17,12 +17,15 @@ async.eachSeries(names, function(name, callback) {
                                         console.log(name + " does not exist");
                                         fs.writeFileSync('workingnames.txt', name + "\n", {flag: 'a'});
                                 } else {
-                                        console.log(name + " exists");
+                                        if(xhr.status == 200) {
+                                                console.log(name + " exists");
+                                                fs.appendFileSync('workingnames.txt', name + "\n", {flag: 'a'});
+                                        }
                                 }
                         }
                 }
                 callback();
-        }, 7500);
+        }, 3500);
 }, function(err) {
         console.log('done');
 });
